@@ -1,6 +1,7 @@
+from gc import callbacks
 import pygame
 import random
-
+import os
 # initialize the game and create the window
 pygame.init()
 WIDTH = 500
@@ -18,14 +19,24 @@ BlUE = (0, 0, 255)
 clock = pygame.time.Clock()
 FPS = 60
 
+# load the picture
+backgroundImage = pygame.image.load(
+    os.path.join("image\img", "background.png")).convert()
+playerImage = pygame.image.load(
+    os.path.join("image\img", "player.png")).convert()
+rockImage = pygame.image.load(
+    os.path.join("image\img", "rock.png")).convert()
+bulletImage = pygame.image.load(
+    os.path.join("image\img", "bullet.png")).convert()
+
 # sprite
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 40))
-        self.image.fill(GREEN)
+        self.image = pygame.transform.scale(playerImage, (50, 38))
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
@@ -51,8 +62,8 @@ class Player(pygame.sprite.Sprite):
 class Rock(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(RED)
+        self.image = rockImage
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
@@ -77,8 +88,8 @@ class Rock(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((10, 20))
-        self.image.fill(BlUE)
+        self.image = bulletImage
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
@@ -132,6 +143,7 @@ while running:
 
     # game display
     screen.fill(BLACK)
+    screen.blit(backgroundImage, (0, 0))
     allSprites.draw(screen)
     pygame.display.update()
 
