@@ -1,6 +1,3 @@
-from random import random
-from tkinter import E
-from turtle import width
 import pygame
 import random
 
@@ -45,6 +42,11 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
+    def shoot(self):
+        bullet = Bullet(self.rect.centerx, self.rect.top)
+        allSprites.add(bullet)
+        bullets.add(bullet)
+
 
 class Rock(pygame.sprite.Sprite):
     def __init__(self):
@@ -72,14 +74,36 @@ class Rock(pygame.sprite.Sprite):
             self.sppedx = random.randrange(-3, 3)
 
 
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((10, 20))
+        self.image.fill(BlUE)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.bottom = y
+        self.speedy = -10
+
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.bottom < 0:
+            self.kill()
+
+
+# groups
 allSprites = pygame.sprite.Group()
+rocks = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
+
 # player
 player = Player()
 allSprites.add(player)
+
 # rock's'
 for i in range(8):
     r = Rock()
     allSprites.add(r)
+    rocks.add(r)
 
 # game loop
 running = True
@@ -91,12 +115,23 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.shoot()
 
     # game update
     allSprites.update()
+    hits = pygame.sprite.groupcollide(rocks, bullets, True, True)
+    for hit in hits:
+        r = Rock()
+        allSprites.add(r)
+        rocks.add(r)
+    hits = pygame.sprite.spritecollide(player, rocks, False)
+    if hits:
+        running = False
 
     # game display
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     allSprites.draw(screen)
     pygame.display.update()
 
