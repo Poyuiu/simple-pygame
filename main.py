@@ -1,3 +1,4 @@
+from tkinter import E
 import pygame
 
 # initialize the game and create the window
@@ -23,11 +24,21 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((50, 40))
         self.image.fill((0, 255, 0))
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+        self.rect.centerx = WIDTH / 2
+        self.rect.bottom = HEIGHT - 10
+        self.speedx = 8
+
     def update(self):
-        self.rect.x += 10
-        if self.rect.left > WIDTH:
-            self.rect.right = 0
+        keyPressed = pygame.key.get_pressed()
+        if keyPressed[pygame.K_RIGHT] or keyPressed[pygame.K_d]:
+            self.rect.x += self.speedx
+        if keyPressed[pygame.K_LEFT] or keyPressed[pygame.K_a]:
+            self.rect.x -= self.speedx
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+
 
 allSprites = pygame.sprite.Group()
 player = Player()
