@@ -21,13 +21,13 @@ FPS = 60
 
 # load the picture
 backgroundImage = pygame.image.load(
-    os.path.join("image\img", "background.png")).convert()
+    os.path.join("image/img", "background.png")).convert()
 playerImage = pygame.image.load(
-    os.path.join("image\img", "player.png")).convert()
+    os.path.join("image/img", "player.png")).convert()
 rockImage = pygame.image.load(
-    os.path.join("image\img", "rock.png")).convert()
+    os.path.join("image/img", "rock.png")).convert()
 bulletImage = pygame.image.load(
-    os.path.join("image\img", "bullet.png")).convert()
+    os.path.join("image/img", "bullet.png")).convert()
 
 # sprite
 
